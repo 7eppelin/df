@@ -19,11 +19,16 @@ const ButtonsWrapper = styled.div`
 type Props = {
 	value: string;
 	onChange: (value: string) => void;
-	onEdit: () => void;
+	onSubmit: () => void;
 	onCancel: () => void;
 };
 
-export const TextField: FC<Props> = ({ value, onChange, onEdit, onCancel }) => {
+export const TextField: FC<Props> = ({
+	value,
+	onChange,
+	onSubmit,
+	onCancel,
+}) => {
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		onChange(e.target.value);
 	};
@@ -33,7 +38,7 @@ export const TextField: FC<Props> = ({ value, onChange, onEdit, onCancel }) => {
 			<Input value={value} onChange={handleChange} />
 
 			<ButtonsWrapper>
-				<button onClick={onEdit}>Save</button>
+				<button onClick={onSubmit}>Save</button>
 				<button onClick={onCancel}>Discard</button>
 			</ButtonsWrapper>
 		</TextFieldWrapper>

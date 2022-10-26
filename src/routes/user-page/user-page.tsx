@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { useStore } from "../store";
-import { Post as PostType, User } from "../types";
-import { getUser, getUserPosts } from "../api";
-import { Link, Post, UserInfo } from "../components";
+import { useStore } from "../../store";
+import { Post as PostType, User } from "../../types";
+import { getUser, getUserPosts } from "../../api";
+import { Link, Post } from "../../components";
+import { UserInfo } from "./user-info";
 
 const UserPageWrapper = styled.main`
 	width: 50vw;

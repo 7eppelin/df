@@ -20,3 +20,8 @@ export type CursorData = {
 	page: number;
 	totalPages: number;
 };
+
+export type PostFilters = {
+	userName?: string;
+	postTitle?: string;
+};

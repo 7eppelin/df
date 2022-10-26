@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { useStore } from "../store";
-import { FIRST_PAGE, DEFAULT_ROWS_PER_PAGE } from "../constants";
-import { RowsPerPage } from "../types";
-import { Link, Pagination, UserItem } from "../components";
+import { useStore } from "../../store";
+import { FIRST_PAGE, DEFAULT_ROWS_PER_PAGE } from "../../constants";
+import { RowsPerPage } from "../../types";
+import { Link, Pagination } from "../../components";
+import { UserListItem } from "./user-list-item";
 
-const Wrapper = styled.main`
+const UsersPageWrapper = styled.main`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -20,25 +21,27 @@ const Ul = styled.ul`
 	padding: 32px;
 `;
 
-export const RootPage = () => {
-	const { users, totalPages, setUsers, editUser, deleteUser } = useStore();
-
+export const UsersPage = () => {
 	const [page, setPage] = useState(FIRST_PAGE);
 	const [rowsPerPage, setRowsPerPage] = useState<RowsPerPage>(
 		DEFAULT_ROWS_PER_PAGE
 	);
+
+	const { users, totalUsers, setUsers, editUser, deleteUser } = useStore();
+
+	const totalPages = Math.ceil(totalUsers / rowsPerPage);
 
 	useEffect(() => {
 		setUsers(page, rowsPerPage);
 	}, [setUsers, page, rowsPerPage]);
 
 	return (
-		<Wrapper>
+		<UsersPageWrapper>
 			<Link to="/posts">Posts</Link>
 
 			<Ul>
 				{users.map((user) => (
-					<UserItem
+					<UserListItem
 						key={user.id}
 						user={user}
 						onDelete={() => deleteUser(user.id)}
@@ -54,6 +57,6 @@ export const RootPage = () => {
 				onPageChange={setPage}
 				onRowsPerPageChange={setRowsPerPage}
 			/>
-		</Wrapper>
+		</UsersPageWrapper>
 	);
 };

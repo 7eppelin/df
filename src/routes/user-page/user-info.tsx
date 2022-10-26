@@ -1,9 +1,9 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
 
-import { User } from "../types";
-import { useStore } from "../store";
-import { TextField } from "./text-field";
+import { User } from "../../types";
+import { useStore } from "../../store";
+import { TextField } from "../../components";
 
 const UserInfoWrapper = styled.div`
 	display: flex;
@@ -49,7 +49,7 @@ export const UserInfo: FC<Props> = ({ user }) => {
 				<TextField
 					value={name}
 					onChange={setName}
-					onEdit={onEdit}
+					onSubmit={onEdit}
 					onCancel={onCancelEditing}
 				/>
 			) : (

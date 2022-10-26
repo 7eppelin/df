@@ -1,9 +1,8 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
 
-import { User } from "../types";
-import { TextField } from "./text-field";
-import { Link } from "./link";
+import { User } from "../../types";
+import { Link, TextField } from "../../components";
 
 const Li = styled.li`
 	padding: 12px 24px;
@@ -20,10 +19,6 @@ const ButtonsWrapper = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 12px;
-
-	button {
-		height: fit-content;
-	}
 `;
 
 type Props = {
@@ -32,7 +27,7 @@ type Props = {
 	onEdit: (user: User) => Promise<void>;
 };
 
-export const UserItem: FC<Props> = ({ user, onEdit, onDelete }) => {
+export const UserListItem: FC<Props> = ({ user, onEdit, onDelete }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [name, setName] = useState(user.name);
 
@@ -54,17 +49,19 @@ export const UserItem: FC<Props> = ({ user, onEdit, onDelete }) => {
 				<TextField
 					value={name}
 					onChange={setName}
-					onEdit={editUser}
+					onSubmit={editUser}
 					onCancel={onCancelEditing}
 				/>
 			) : (
 				<Link to={`users/${user.id}`}>{user.name}</Link>
 			)}
 
-			<ButtonsWrapper>
-				<button onClick={() => setIsEditing(true)}>Edit</button>
-				<button onClick={onDelete}>Delete</button>
-			</ButtonsWrapper>
+			{!isEditing && (
+				<ButtonsWrapper>
+					<button onClick={() => setIsEditing(true)}>Edit</button>
+					<button onClick={onDelete}>Delete</button>
+				</ButtonsWrapper>
+			)}
 		</Li>
 	);
 };

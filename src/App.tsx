@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import styled from "styled-components";
 
-import { RootPage, PostPage, PostsPage, UserPage } from "./routes";
+import { UsersPage, PostPage, PostsPage, UserPage } from "./routes";
 
 const AppWrapper = styled.div`
 	display: flex;
@@ -12,7 +12,7 @@ const AppWrapper = styled.div`
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <RootPage />,
+		element: <UsersPage />,
 	},
 	{
 		path: "/posts",

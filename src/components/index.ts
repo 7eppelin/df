@@ -1,5 +1,4 @@
-export { UserItem } from "./user-item";
+export { TextField } from "./text-field";
 export { Link } from "./link";
 export { Pagination } from "./pagination";
-export { UserInfo } from "./user-info";
 export { Post } from "./post";

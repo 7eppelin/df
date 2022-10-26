@@ -1,5 +1,4 @@
-import { User, Post } from "../types";
-import { FIRST_PAGE } from "../constants";
+import { User, Post, PostFilters } from "../types";
 
 const users = [
 	{
@@ -211,7 +210,7 @@ const posts = [
 type GetUsers = (
 	page: number,
 	perPage: number
-) => Promise<{ users: User[]; totalPages: number }>;
+) => Promise<{ users: User[]; totalUsers: number }>;
 
 export const getUsers: GetUsers = (page, perPage) => {
 	return new Promise((res) => {
@@ -219,11 +218,10 @@ export const getUsers: GetUsers = (page, perPage) => {
 			const start = (page - 1) * perPage;
 			const end = start + perPage;
 
-			const response = {
+			res({
 				users: users.slice(start, end),
-				totalPages: Math.ceil(users.length / perPage),
-			};
-			res(response);
+				totalUsers: users.length,
+			});
 		}, 300);
 	});
 };
@@ -271,14 +269,39 @@ export const getUserPosts = (userId: number) => {
 	});
 };
 
-export const getPosts = (
+type GetPosts = (
 	page: number,
 	perPage: number,
-	filters: { userId?: number; title?: string }
-) => {
+	filters: PostFilters
+) => Promise<{ posts: Post[]; totalPosts: number }>;
+
+export const getPosts: GetPosts = (page, perPage, filters) => {
+	const { userName, postTitle } = filters;
+
 	return new Promise((res) => {
 		setTimeout(() => {
-			// TODO
+			const start = (page - 1) * perPage;
+			const end = start + perPage;
+
+			let matchedPosts = posts;
+
+			if (userName) {
+				// in case usernames can be not unique
+				const matchedUsers = users.filter((u) => u.name.includes(userName));
+				console.log(matchedUsers);
+				const matchedUserIds = matchedUsers.map((u) => u.id);
+
+				matchedPosts = posts.filter((p) => matchedUserIds.includes(p.user_id));
+			}
+
+			if (postTitle) {
+				matchedPosts = matchedPosts.filter((p) => p.title.includes(postTitle));
+			}
+
+			res({
+				posts: matchedPosts.slice(start, end),
+				totalPosts: matchedPosts.length,
+			});
 		}, 300);
 	});
 };
