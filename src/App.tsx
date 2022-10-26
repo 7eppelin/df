@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import styled from "styled-components";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { RootPage, PostPage, PostsPage, UserPage } from "./routes";
 
-export default App;
+const AppWrapper = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <RootPage />,
+	},
+	{
+		path: "/posts",
+		element: <PostsPage />,
+	},
+	{
+		path: "/posts/:id",
+		element: <PostPage />,
+	},
+	{
+		path: "/users/:id",
+		element: <UserPage />,
+	},
+]);
+
+export const App = () => {
+	return (
+		<AppWrapper>
+			<RouterProvider router={router} />
+		</AppWrapper>
+	);
+};
