@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 
 const TextFieldWrapper = styled.div`
@@ -29,17 +29,13 @@ export const TextField: FC<Props> = ({
 	onSubmit,
 	onCancel,
 }) => {
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		onChange(e.target.value);
-	};
-
 	return (
 		<TextFieldWrapper>
-			<Input value={value} onChange={handleChange} />
+			<Input value={value} onChange={(e) => onChange(e.target.value)} />
 
 			<ButtonsWrapper>
-				<button onClick={onSubmit}>Save</button>
-				<button onClick={onCancel}>Discard</button>
+				<button onClick={onSubmit}>save</button>
+				<button onClick={onCancel}>cancel</button>
 			</ButtonsWrapper>
 		</TextFieldWrapper>
 	);

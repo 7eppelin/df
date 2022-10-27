@@ -1,9 +1,8 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
 
-import { User } from "../../types";
-import { useStore } from "../../store";
-import { TextField } from "../../components";
+import { User } from "src/types";
+import { TextField } from "src/components";
 
 const UserInfoWrapper = styled.div`
 	display: flex;
@@ -23,18 +22,15 @@ const UserEmail = styled.div`
 
 type Props = {
 	user: User;
+	onSubmitEditing: (name: string) => Promise<void>;
 };
 
-export const UserInfo: FC<Props> = ({ user }) => {
+export const UserInfo: FC<Props> = ({ user, onSubmitEditing }) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [name, setName] = useState(user.name);
 
-	const { editUser } = useStore();
-
-	const onEdit = async () => {
-		const newUser: User = { ...user, name };
-		await editUser(newUser);
-
+	const handleSubmitEditing = async () => {
+		await onSubmitEditing(name);
 		setIsEditing(false);
 	};
 
@@ -49,7 +45,7 @@ export const UserInfo: FC<Props> = ({ user }) => {
 				<TextField
 					value={name}
 					onChange={setName}
-					onSubmit={onEdit}
+					onSubmit={handleSubmitEditing}
 					onCancel={onCancelEditing}
 				/>
 			) : (

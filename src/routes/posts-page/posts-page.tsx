@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { Link, Pagination, Post } from "../../components";
-import { FIRST_PAGE, DEFAULT_ROWS_PER_PAGE } from "../../constants";
-import { PostFilters, RowsPerPage } from "../../types";
-import { useStore } from "../../store";
+import { Link, Pagination, Post } from "src/components";
+
 import { PostFiltersForm } from "./post-filters-form";
+import { usePostsPageVM } from "./use-posts-page-vm";
 
 const PostsPageWrapper = styled.div`
 	display: flex;
@@ -22,42 +20,29 @@ const PostsWrapper = styled.div`
 `;
 
 export const PostsPage = () => {
-	const [page, setPage] = useState(FIRST_PAGE);
-	const [rowsPerPage, setRowsPerPage] = useState<RowsPerPage>(
-		DEFAULT_ROWS_PER_PAGE
-	);
-
-	const { posts, totalPosts, setPosts } = useStore();
-
-	const totalPages = Math.ceil(totalPosts / rowsPerPage);
-
-	useEffect(() => {
-		setPosts(page, rowsPerPage, {});
-	}, [setPosts, page, rowsPerPage]);
-
-	const searchPosts = (filters: PostFilters) => {
-		setPosts(page, rowsPerPage, filters);
-	};
+	const vm = usePostsPageVM();
 
 	return (
 		<PostsPageWrapper>
 			<Link to="/">{"<- back to Users"}</Link>
 
-			<PostFiltersForm onSubmit={searchPosts} />
+			<PostFiltersForm onSubmit={vm.searchPosts} />
 
 			<PostsWrapper>
-				{posts.map((post) => (
+				{vm.posts.map((post) => (
 					<Post key={post.id} post={post} />
 				))}
 			</PostsWrapper>
 
-			<Pagination
-				page={page}
-				totalPages={totalPages}
-				rowsPerPage={rowsPerPage}
-				onPageChange={setPage}
-				onRowsPerPageChange={setRowsPerPage}
-			/>
+			{vm.posts.length !== 0 && (
+				<Pagination
+					page={vm.page}
+					totalPages={vm.totalPages}
+					rowsPerPage={vm.rowsPerPage}
+					onPageChange={vm.setPage}
+					onRowsPerPageChange={vm.setRowsPerPage}
+				/>
+			)}
 		</PostsPageWrapper>
 	);
 };

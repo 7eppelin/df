@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
 
-import { User } from "../../types";
-import { Link, TextField } from "../../components";
+import { User } from "src/types";
+import { Link, TextField } from "src/components";
 
 const Li = styled.li`
 	padding: 12px 24px;
@@ -32,9 +32,7 @@ export const UserListItem: FC<Props> = ({ user, onEdit, onDelete }) => {
 	const [name, setName] = useState(user.name);
 
 	const editUser = async () => {
-		const newUser: User = { ...user, name };
-		await onEdit(newUser);
-
+		await onEdit({ ...user, name });
 		setIsEditing(false);
 	};
 
@@ -53,7 +51,7 @@ export const UserListItem: FC<Props> = ({ user, onEdit, onDelete }) => {
 					onCancel={onCancelEditing}
 				/>
 			) : (
-				<Link to={`users/${user.id}`}>{user.name}</Link>
+				<Link to={`/${user.id}`}>{user.name}</Link>
 			)}
 
 			{!isEditing && (

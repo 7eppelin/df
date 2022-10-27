@@ -1,4 +1,4 @@
-import { ROWS_PER_PAGE } from "../constants";
+import { ROWS_PER_PAGE } from "src/constants";
 
 export type RowsPerPage = typeof ROWS_PER_PAGE[number];
 

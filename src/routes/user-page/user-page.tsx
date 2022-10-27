@@ -1,12 +1,9 @@
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 
-import { useStore } from "../../store";
-import { Post as PostType, User } from "../../types";
-import { getUser, getUserPosts } from "../../api";
-import { Link, Post } from "../../components";
+import { Link, Post } from "src/components";
+
 import { UserInfo } from "./user-info";
+import { useUserPageVM } from "./use-user-page-vm";
 
 const UserPageWrapper = styled.main`
 	width: 50vw;
@@ -24,33 +21,13 @@ const PostsWrapper = styled.section`
 `;
 
 export const UserPage = () => {
-	const [user, setUser] = useState<User | null>(null);
-	const [posts, setPosts] = useState<PostType[]>([]);
-
-	const { users } = useStore();
-	const { id } = useParams();
-
-	useEffect(() => {
-		const init = async () => {
-			const uid = Number(id);
-
-			const userFromStore = users.find((u) => u.id === uid);
-			const user = userFromStore || (await getUser(uid));
-
-			const posts = await getUserPosts(uid);
-
-			setUser(user);
-			setPosts(posts);
-		};
-
-		init();
-	}, [users, id]);
+	const { user, posts, onSubmitEditing } = useUserPageVM();
 
 	return (
 		<UserPageWrapper>
-			<Link to="/">back to all Users</Link>
+			<Link to="/">{`<- back to all Users`}</Link>
 
-			{user && <UserInfo user={user} />}
+			{user && <UserInfo user={user} onSubmitEditing={onSubmitEditing} />}
 
 			<PostsWrapper>
 				{posts.map((post) => (

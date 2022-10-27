@@ -250,12 +250,12 @@ export const deleteUser = (userId: number) => {
 	});
 };
 
-export const editUser = (user: User) => {
-	return new Promise<void>((res) => {
+export const updateUser = (user: User) => {
+	return new Promise<User>((res) => {
 		setTimeout(() => {
 			const userIndex = users.findIndex((u) => u.id === user.id);
 			users[userIndex] = user;
-			res();
+			res(user);
 		}, 300);
 	});
 };
@@ -287,15 +287,26 @@ export const getPosts: GetPosts = (page, perPage, filters) => {
 
 			if (userName) {
 				// in case usernames can be not unique
-				const matchedUsers = users.filter((u) => u.name.includes(userName));
-				console.log(matchedUsers);
-				const matchedUserIds = matchedUsers.map((u) => u.id);
+				const matchedUserIds = users.reduce<number[]>((acc, user) => {
+					const sourceName = user.name.toLowerCase();
+					const searchName = userName.trim().toLowerCase();
 
-				matchedPosts = posts.filter((p) => matchedUserIds.includes(p.user_id));
+					if (sourceName.includes(searchName)) {
+						acc.push(user.id);
+					}
+
+					return acc;
+				}, []);
+
+				matchedPosts = matchedPosts.filter((p) =>
+					matchedUserIds.includes(p.user_id)
+				);
 			}
 
 			if (postTitle) {
-				matchedPosts = matchedPosts.filter((p) => p.title.includes(postTitle));
+				matchedPosts = matchedPosts.filter((p) =>
+					p.title.toLowerCase().includes(postTitle.toLowerCase())
+				);
 			}
 
 			res({
@@ -307,9 +318,27 @@ export const getPosts: GetPosts = (page, perPage, filters) => {
 };
 
 export const getPost = (postId: number) => {
-	return new Promise((res) => {
+	return new Promise<Post>((resolve, reject) => {
 		setTimeout(() => {
-			// TODO
+			const post = posts.find((p) => p.id === postId);
+
+			if (post) {
+				resolve(post);
+			} else {
+				reject("post not found");
+			}
+		}, 300);
+	});
+};
+
+export const updatePost = (newPost: Post) => {
+	return new Promise<Post>((resolve) => {
+		setTimeout(() => {
+			const postIndex = posts.findIndex((p) => p.id === newPost.id);
+
+			posts[postIndex] = newPost;
+
+			resolve(newPost);
 		}, 300);
 	});
 };

@@ -1,12 +1,24 @@
 import { FC, FormEvent, useState } from "react";
 import styled from "styled-components";
 
-import { PostFilters } from "../../types";
+import { PostFilters } from "src/types";
 
 const FiltersFormWrapper = styled.form`
+	width: 400px;
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 12px;
+
+	label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	input {
+		width: 280px;
+		padding: 6px 16px;
+	}
 `;
 
 type Props = {
@@ -29,12 +41,12 @@ export const PostFiltersForm: FC<Props> = ({ onSubmit }) => {
 	return (
 		<FiltersFormWrapper onSubmit={handleSubmit}>
 			<label>
-				user name
+				<span>user name: </span>
 				<input value={userName} onChange={(e) => setUserName(e.target.value)} />
 			</label>
 
 			<label>
-				post title
+				<span>post title: </span>
 				<input
 					value={postTitle}
 					onChange={(e) => setPostTitle(e.target.value)}

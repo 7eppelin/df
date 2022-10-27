@@ -1,8 +1,8 @@
 import { ChangeEvent, FC } from "react";
 import styled from "styled-components";
 
-import { RowsPerPage } from "../types";
-import { FIRST_PAGE, ROWS_PER_PAGE } from "../constants";
+import { RowsPerPage } from "src/types";
+import { FIRST_PAGE, ROWS_PER_PAGE } from "src/constants";
 
 const PaginationWrapper = styled.div`
 	display: flex;
@@ -29,26 +29,31 @@ export const Pagination: FC<Props> = ({
 		onPageChange(FIRST_PAGE);
 	};
 
+	const prevPage = () => onPageChange(page - 1);
+	const nexPage = () => onPageChange(page + 1);
+	const firstPage = () => onPageChange(FIRST_PAGE);
+	const lastPage = () => onPageChange(totalPages);
+
 	const isFirstPage = page === FIRST_PAGE;
 	const isLastPage = page === totalPages;
 
 	return (
 		<PaginationWrapper>
-			<button onClick={() => onPageChange(FIRST_PAGE)} disabled={isFirstPage}>
+			<button onClick={firstPage} disabled={isFirstPage}>
 				first
 			</button>
 
-			<button onClick={() => onPageChange(page - 1)} disabled={isFirstPage}>
+			<button onClick={prevPage} disabled={isFirstPage}>
 				prev
 			</button>
 
 			<div>{page}</div>
 
-			<button onClick={() => onPageChange(page + 1)} disabled={isLastPage}>
+			<button onClick={nexPage} disabled={isLastPage}>
 				next
 			</button>
 
-			<button onClick={() => onPageChange(totalPages)} disabled={isLastPage}>
+			<button onClick={lastPage} disabled={isLastPage}>
 				last
 			</button>
 

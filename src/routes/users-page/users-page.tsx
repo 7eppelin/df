@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { useStore } from "../../store";
-import { FIRST_PAGE, DEFAULT_ROWS_PER_PAGE } from "../../constants";
-import { RowsPerPage } from "../../types";
-import { Link, Pagination } from "../../components";
+import { Link, Pagination } from "src/components";
+
+import { useUsersPageVM } from "./use-users-page-vm";
 import { UserListItem } from "./user-list-item";
 
 const UsersPageWrapper = styled.main`
@@ -22,41 +20,32 @@ const Ul = styled.ul`
 `;
 
 export const UsersPage = () => {
-	const [page, setPage] = useState(FIRST_PAGE);
-	const [rowsPerPage, setRowsPerPage] = useState<RowsPerPage>(
-		DEFAULT_ROWS_PER_PAGE
-	);
-
-	const { users, totalUsers, setUsers, editUser, deleteUser } = useStore();
-
-	const totalPages = Math.ceil(totalUsers / rowsPerPage);
-
-	useEffect(() => {
-		setUsers(page, rowsPerPage);
-	}, [setUsers, page, rowsPerPage]);
+	const vm = useUsersPageVM();
 
 	return (
 		<UsersPageWrapper>
 			<Link to="/posts">Posts</Link>
 
 			<Ul>
-				{users.map((user) => (
+				{vm.users.map((user) => (
 					<UserListItem
 						key={user.id}
 						user={user}
-						onDelete={() => deleteUser(user.id)}
-						onEdit={editUser}
+						onDelete={() => vm.deleteUser(user.id)}
+						onEdit={vm.editUser}
 					/>
 				))}
 			</Ul>
 
-			<Pagination
-				page={page}
-				totalPages={totalPages}
-				rowsPerPage={rowsPerPage}
-				onPageChange={setPage}
-				onRowsPerPageChange={setRowsPerPage}
-			/>
+			{vm.users.length !== 0 && (
+				<Pagination
+					page={vm.page}
+					totalPages={vm.totalPages}
+					rowsPerPage={vm.rowsPerPage}
+					onPageChange={vm.setPage}
+					onRowsPerPageChange={vm.setRowsPerPage}
+				/>
+			)}
 		</UsersPageWrapper>
 	);
 };
