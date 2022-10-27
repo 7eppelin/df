@@ -37,9 +37,8 @@ export const usePostPageVM = () => {
 			date: new Date().toString(),
 		};
 
-		const updatedPost = await updatePost(newPost);
-
-		setPost(updatedPost);
+		setPost(newPost);
+		updatePost(newPost);
 		setIsEditing(false);
 	};
 
