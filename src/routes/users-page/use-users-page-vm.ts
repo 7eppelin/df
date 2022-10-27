@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { getUsers, updateUser, deleteUser as deleteUserApi } from "src/api";
 import { FIRST_PAGE, DEFAULT_ROWS_PER_PAGE } from "src/constants";
@@ -13,16 +13,16 @@ export const useUsersPageVM = () => {
 		DEFAULT_ROWS_PER_PAGE
 	);
 
-	useEffect(() => {
-		const fetchUsers = async () => {
-			const response = await getUsers(page, rowsPerPage);
+	const fetchUsers = useCallback(async () => {
+		const response = await getUsers(page, rowsPerPage);
 
-			setUsers(response.users);
-			setTotalUsers(response.totalUsers);
-		};
-
-		fetchUsers();
+		setUsers(response.users);
+		setTotalUsers(response.totalUsers);
 	}, [page, rowsPerPage]);
+
+	useEffect(() => {
+		fetchUsers();
+	}, [fetchUsers]);
 
 	const editUser = async (user: User) => {
 		const updatedUser = await updateUser(user);
@@ -36,9 +36,7 @@ export const useUsersPageVM = () => {
 
 	const deleteUser = async (userId: number) => {
 		await deleteUserApi(userId);
-
-		const newUsers = users.filter((u) => u.id !== userId);
-		setUsers(newUsers);
+		fetchUsers();
 	};
 
 	const totalPages = Math.ceil(totalUsers / rowsPerPage);
